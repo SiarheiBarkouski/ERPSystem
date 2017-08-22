@@ -1,0 +1,129 @@
+﻿<Window x:Class="ERPSystem.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:charting="clr-namespace:System.Windows.Controls.DataVisualization.Charting;assembly=System.Windows.Controls.DataVisualization.Toolkit"
+        xmlns:local="clr-namespace:ERPSystem"
+        xmlns:infrastructure="clr-namespace:ERPSystem.Infrastructure"
+        xmlns:converters="clr-namespace:ERPSystem.Converters"
+        xmlns:uc="clr-namespace:ERPSystem.UserControls"
+        mc:Ignorable="d"
+        Title="MainWindow" MinWidth="900" Width="900" MinHeight="500" Height="500">
+    <Window.Resources>
+        <converters:EmployeeConverter x:Key="ExpanderEmpConv"></converters:EmployeeConverter>
+        <converters:RolesConverter x:Key="RolesConv"></converters:RolesConverter>
+        <DataTemplate x:Key="lbDataTempl">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="150"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Image Width="60" Height="60" Source="{Binding Path=Photo}" Margin="5"></Image>
+                <Grid VerticalAlignment="Center" Grid.Column="1" Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="{Binding Path=Fio}" FontSize="16" Grid.Row="0" Padding="4" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <TextBlock Text="{Binding Path=Role, Converter={StaticResource RolesConv}}" FontSize="16" Grid.Row="1" Padding="2" HorizontalAlignment="Center" VerticalAlignment="Center"></TextBlock>
+                    <Border Grid.RowSpan="2" BorderBrush="Yellow" BorderThickness="2"></Border>
+                </Grid>
+                <Border BorderBrush="Yellow" BorderThickness="2"></Border>
+            </Grid>
+        </DataTemplate>
+    </Window.Resources>
+    <Window.DataContext>
+        <infrastructure:ViewRepository></infrastructure:ViewRepository>
+    </Window.DataContext>
+    
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="auto"></ColumnDefinition>
+            <ColumnDefinition Width="*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto"></RowDefinition>
+            <RowDefinition Height="*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Menu Grid.ColumnSpan="2">
+            <MenuItem Header="Actions">
+                <MenuItem Header="Add new employee" Command="{Binding Path=AddEmployee}"></MenuItem>                
+            </MenuItem>
+        </Menu>
+        <ListBox Grid.Row="1" Grid.Column="0" x:Name="lbEmployees" SelectedItem="{Binding Path=SelectedEmployee, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged}" ItemsSource="{Binding Path=EmployeeList}" ItemTemplate="{StaticResource lbDataTempl}" Margin="5"></ListBox>
+        <Grid Grid.Column="1" Grid.Row="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="*"></RowDefinition>
+                <RowDefinition Height="auto"></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid Margin="5" Background="{StaticResource ControlLightBackground}">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Margin="5">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Margin="5"  Width="170" Height="170" Source="{Binding Path=SelectedEmployee.Photo, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}"></Image>
+                    <TextBlock Grid.Row="1" Text="{Binding SelectedEmployee.Fio}" FontSize="20" HorizontalAlignment="Center"></TextBlock>
+                    <uc:RatingCell Grid.Row="2" RatingValue="{Binding Path=SelectedEmployee.Rating}" HorizontalAlignment="Center"></uc:RatingCell>
+                    <Expander Grid.Row="3" Header="Additional information">
+                        <Expander.Content>
+                            <TextBlock Margin="5" Text="{Binding Path=SelectedEmployee, Converter={StaticResource ExpanderEmpConv}}"></TextBlock>
+                        </Expander.Content>
+                    </Expander>
+                </Grid>
+                <Grid Grid.Column="1" Background="LightGray" Margin="10">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                        <RowDefinition Height="*"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <TextBlock Text="INDICATORS" FontSize="30" Margin="5,0"></TextBlock>
+                    <TextBlock Text="of quality of tasks" FontSize="15" Grid.Row="1" Margin="5,0"></TextBlock>
+                    <charting:Chart Grid.Row="2" BorderBrush="LightGray">
+                        <charting:Chart.Axes>
+                            <charting:LinearAxis Orientation="X" Minimum="0" Maximum="100"/>                            
+                        </charting:Chart.Axes>
+                        <charting:Chart.LegendStyle>
+                            <Style TargetType="Control">
+                                <Setter Property="Width" Value="0"/>
+                                <Setter Property="Height" Value="0"/>
+                            </Style>
+                        </charting:Chart.LegendStyle>
+                        <charting:BarSeries                                    
+                                    ItemsSource="{Binding Path=SelectedEmployee.Effeciency.EffeciencyValuesList}" 
+                                    DependentValueBinding="{Binding Path=Value}"                                     
+                                    IndependentValueBinding="{Binding Path=Key}"
+                                    IsSelectionEnabled="True">                            
+                        </charting:BarSeries>
+                    </charting:Chart>
+                </Grid>
+            </Grid>
+
+            <GridSplitter Grid.Row="1" 
+              Background="White"
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Top"
+              ShowsPreview="true"
+              ResizeDirection="Rows"
+              Height="5"/>
+            <DataGrid Grid.Row="1" Margin="5" CanUserAddRows="False" ItemsSource="{Binding Path=SelectedEmployee.ThisEmployeeProjects}" AutoGenerateColumns="False">
+                <DataGrid.Columns>
+                    <DataGridTextColumn Header="Project Name" Binding="{Binding Path=ProjectName}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Client Name" Binding="{Binding Path=ClientName}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Date Begin" Binding="{Binding Path=DateBegin}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Date End" Binding="{Binding Path=DateEnd}"></DataGridTextColumn>
+                    <DataGridTextColumn Header="Percentage Of Completion" Binding="{Binding Path=PercentageOfCompletion}"></DataGridTextColumn>
+                </DataGrid.Columns>
+            </DataGrid>
+        </Grid>
+    </Grid>
+</Window>

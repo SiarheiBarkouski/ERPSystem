@@ -1,0 +1,82 @@
+﻿<Window x:Class="ERPSystem.AddNewEmployeeWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:ERPSystem"
+        xmlns:infrastructure="clr-namespace:ERPSystem.Infrastructure"
+        xmlns:converters="clr-namespace:ERPSystem.Converters"
+        xmlns:entities="clr-namespace:ERPSystem.Entities"
+        xmlns:uc="clr-namespace:ERPSystem.UserControls"
+        xmlns:sys="clr-namespace:System;assembly=mscorlib"
+        mc:Ignorable="d"
+        Title="AddNewEmployeeWindow" Height="900" Width="900" ResizeMode="NoResize">
+    <Window.Resources>
+        <ObjectDataProvider MethodName="GetValues"
+                ObjectType="{x:Type sys:Enum}"
+                x:Key="Roles">
+            <ObjectDataProvider.MethodParameters>
+                <x:Type TypeName="entities:Roles" />
+            </ObjectDataProvider.MethodParameters>
+        </ObjectDataProvider>
+        <converters:DateConverter x:Key="DateConv"></converters:DateConverter>
+        <converters:RolesConverter x:Key="RoleConv"></converters:RolesConverter>
+        <converters:ProjectConverter x:Key="ProjConv"></converters:ProjectConverter>
+    </Window.Resources>
+
+    <TabControl>
+        <TabItem Header="General info">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="auto"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                    <RowDefinition Height="auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid Grid.Row="0" Grid.Column="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"></RowDefinition>
+                        <RowDefinition Height="auto"></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <Image Margin="10" Grid.Row="0" Grid.Column="0" Source="{Binding Path=NewEmployee.Photo,  NotifyOnSourceUpdated=True, UpdateSourceTrigger=PropertyChanged}" AllowDrop="True"></Image>
+                    <Button Margin="5" Grid.Row="1" Grid.Column="0" Content="Open image" FontSize="25" Command="{Binding OpenImage}"></Button>
+                </Grid>
+                <ListBox Margin="5" Grid.Row="0" Grid.Column="1" Name="lbRole" ItemsSource="{Binding Source={StaticResource Roles}}"       
+        FontSize="25" SelectedItem="{Binding Path=NewEmployee.Role, Mode=OneWayToSource, UpdateSourceTrigger=PropertyChanged, Converter={StaticResource RoleConv}}"></ListBox>
+                <Label Margin="5" Grid.Row="1" Grid.Column="0" Content="FIO" HorizontalContentAlignment="Center" FontSize="25"></Label>
+                <TextBox Margin="5" Grid.Row="1" Grid.Column="1" Text="{Binding Path=NewEmployee.Fio}" FontSize="16"></TextBox>
+
+                <Label Margin="5" Grid.Row="2" Grid.Column="0" Content="ADDRESS" HorizontalContentAlignment="Center" FontSize="25"></Label>
+                <TextBox Margin="5" Grid.Row="2" Grid.Column="1" Text="{Binding Path=NewEmployee.Address}" FontSize="16"></TextBox>
+
+                <Label Margin="5" Grid.Row="3" Grid.Column="0" Content="DATE OF BIRTH" HorizontalContentAlignment="Center" FontSize="25"></Label>
+                <DatePicker Margin="5" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" FontSize="16" Text="{Binding Path=NewEmployee.Birth, Mode=OneWayToSource, Converter={StaticResource DateConv}}"></DatePicker>
+
+                <Label Margin="5" Grid.Row="4" Grid.Column="0" Content="Teamwork Effeciency" HorizontalContentAlignment="Center" FontSize="25"></Label>
+                <Slider Margin="5" Grid.Row="4" Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding Path=NewEmployee.Effeciency.TeamworkEffeciency_}" VerticalAlignment="Center"></Slider>
+
+                <Label Margin="5" Grid.Row="5" Grid.Column="0" Content="Self Development" HorizontalContentAlignment="Center" FontSize="25"></Label>
+                <Slider Margin="5" Grid.Row="5" Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding Path=NewEmployee.Effeciency.SelfDevelopment_}" VerticalAlignment="Center"></Slider>
+
+                <Label Margin="5" Grid.Row="6" Grid.Column="0" Content="Percent Of Completed Projects" HorizontalContentAlignment="Center" FontSize="25"></Label>
+                <Slider Margin="5" Grid.Row="6" Grid.Column="1" Minimum="0" Maximum="100" Value="{Binding Path=NewEmployee.Effeciency.PercentOfCompletedProjects_}" VerticalAlignment="Center"></Slider>
+
+                <Button Margin="5" Grid.Row="7" Grid.Column="1" Content="ADD" Click="Button_Click"></Button>
+
+            </Grid>
+        </TabItem>
+        <TabItem Header="Projects">
+            <Grid>
+                <DataGrid ItemsSource="{Binding Path=ProjectList}"></DataGrid>
+            </Grid>
+        </TabItem>
+    </TabControl>
+</Window>
