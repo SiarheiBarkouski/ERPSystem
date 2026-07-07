@@ -1,0 +1,547 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>График реализации проекта</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Merriweather:wght@700;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --navy: #1a2b4a;
+      --navy-dark: #0f1c33;
+      --gold: #c9a227;
+      --gold-light: #f5edd4;
+      --gold-pale: #faf6eb;
+      --gray-bg: #e8eaed;
+      --gray-block: #f0f1f3;
+      --text-dark: #1a2b4a;
+      --text-muted: #5a6478;
+      --white: #ffffff;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      background: var(--gray-bg);
+      color: var(--text-dark);
+      min-height: 100vh;
+      padding: 32px 24px 48px;
+    }
+
+    .page {
+      max-width: 1280px;
+      margin: 0 auto;
+      background: var(--white);
+      box-shadow: 0 4px 24px rgba(26, 43, 74, 0.12);
+      padding: 40px 48px 0;
+    }
+
+    /* Header */
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      margin-bottom: 36px;
+      gap: 24px;
+    }
+
+    .header-left h1 {
+      font-family: 'Merriweather', Georgia, serif;
+      font-size: 2rem;
+      font-weight: 900;
+      color: var(--navy);
+      text-transform: uppercase;
+      letter-spacing: 0.02em;
+      line-height: 1.2;
+      margin-bottom: 10px;
+    }
+
+    .header-left .subtitle {
+      font-size: 0.95rem;
+      font-style: italic;
+      color: var(--text-muted);
+      max-width: 520px;
+      line-height: 1.5;
+    }
+
+    .legend {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      flex-shrink: 0;
+    }
+
+    .legend-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .legend-dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .legend-dot.navy { background: var(--navy); }
+    .legend-dot.gold { background: var(--gold); }
+
+    /* Roadmap */
+    .roadmap {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      margin-bottom: 40px;
+      overflow-x: auto;
+    }
+
+    .step {
+      flex: 1;
+      min-width: 180px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .step-header {
+      background: var(--navy);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 600;
+      padding: 10px 12px;
+      text-align: center;
+      line-height: 1.3;
+    }
+
+    .step-body {
+      background: var(--gray-block);
+      padding: 20px 14px 18px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .step-icon {
+      width: 52px;
+      height: 52px;
+      border: 2px solid var(--navy);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 10px;
+      background: var(--white);
+    }
+
+    .step-icon svg {
+      width: 26px;
+      height: 26px;
+      stroke: var(--navy);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .step-year {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--gold);
+      margin-bottom: 6px;
+    }
+
+    .step-title {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .step-desc {
+      font-size: 0.72rem;
+      color: var(--text-dark);
+      line-height: 1.45;
+      opacity: 0.85;
+    }
+
+    .arrow {
+      display: flex;
+      align-items: center;
+      padding: 0 2px;
+      color: var(--navy);
+      font-size: 1.4rem;
+      align-self: center;
+      margin-top: 24px;
+    }
+
+    /* Goal box */
+    .goal-box {
+      flex: 0 0 220px;
+      min-width: 200px;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .goal-header {
+      background: var(--gold);
+      color: var(--white);
+      font-size: 0.78rem;
+      font-weight: 700;
+      padding: 10px 12px;
+      text-align: center;
+      letter-spacing: 0.04em;
+    }
+
+    .goal-body {
+      border: 2px solid var(--gold);
+      background: var(--gold-pale);
+      padding: 18px 16px;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .goal-icon {
+      width: 44px;
+      height: 44px;
+      margin-bottom: 10px;
+    }
+
+    .goal-icon svg {
+      width: 100%;
+      height: 100%;
+      stroke: var(--gold);
+      fill: none;
+      stroke-width: 2;
+    }
+
+    .goal-text {
+      font-size: 0.78rem;
+      color: var(--text-dark);
+      line-height: 1.4;
+      margin-bottom: 6px;
+    }
+
+    .goal-highlight {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--gold);
+      line-height: 1.3;
+      margin-bottom: 12px;
+    }
+
+    .goal-divider {
+      width: 80%;
+      border: none;
+      border-top: 1px dashed var(--gold);
+      margin: 8px 0;
+    }
+
+    .goal-note {
+      font-size: 0.68rem;
+      color: var(--text-muted);
+      line-height: 1.4;
+    }
+
+    /* Management section */
+    .mgmt-section {
+      margin-bottom: 0;
+    }
+
+    .mgmt-header {
+      background: var(--navy);
+      color: var(--white);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 12px 24px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    .mgmt-header .year-badge {
+      font-size: 0.9rem;
+      font-weight: 700;
+    }
+
+    .mgmt-options {
+      display: flex;
+      align-items: stretch;
+      gap: 0;
+      padding: 24px;
+      background: var(--white);
+    }
+
+    .mgmt-block {
+      flex: 1;
+      background: var(--navy);
+      color: var(--white);
+      padding: 28px 24px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+    }
+
+    .mgmt-icon {
+      width: 56px;
+      height: 56px;
+      border: 2px solid rgba(255,255,255,0.4);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 14px;
+    }
+
+    .mgmt-icon svg {
+      width: 28px;
+      height: 28px;
+      stroke: var(--white);
+      fill: none;
+      stroke-width: 1.8;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+
+    .mgmt-title {
+      font-size: 1rem;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+
+    .mgmt-desc {
+      font-size: 0.78rem;
+      line-height: 1.5;
+      opacity: 0.9;
+    }
+
+    .mgmt-or {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 48px;
+      flex-shrink: 0;
+      align-self: center;
+    }
+
+    .mgmt-or-circle {
+      width: 36px;
+      height: 36px;
+      background: var(--gold);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 0.7rem;
+      font-weight: 600;
+      color: var(--white);
+    }
+
+    /* Third option row */
+    .mgmt-extra {
+      padding: 0 24px 24px;
+      background: var(--white);
+    }
+
+    .mgmt-block-wide {
+      background: var(--navy);
+      color: var(--white);
+      padding: 24px 32px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .mgmt-block-wide .mgmt-icon {
+      margin-bottom: 0;
+      flex-shrink: 0;
+    }
+
+    .mgmt-block-wide .mgmt-content {
+      text-align: left;
+    }
+
+    /* Footer */
+    .footer {
+      background: var(--navy);
+      color: var(--white);
+      padding: 16px 24px;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      margin: 0 -48px;
+    }
+
+    .footer strong {
+      color: var(--gold);
+    }
+
+    @media (max-width: 900px) {
+      .page { padding: 24px 20px 0; }
+      .header { flex-direction: column; }
+      .roadmap { flex-direction: column; }
+      .arrow { transform: rotate(90deg); justify-content: center; margin: 4px 0; }
+      .goal-box { flex: 1; }
+      .mgmt-options { flex-direction: column; gap: 12px; }
+      .mgmt-or { width: auto; padding: 4px 0; }
+      .footer { margin: 0 -20px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="page">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-left">
+        <h1>График реализации проекта</h1>
+        <p class="subtitle">Подготовка архивного фонда к передаче на аутсорсинг или сканирование</p>
+      </div>
+      <div class="legend">
+        <div class="legend-item">
+          <span class="legend-dot navy"></span>
+          <span>Точечная активность (2026)</span>
+        </div>
+        <div class="legend-item">
+          <span class="legend-dot gold"></span>
+          <span>Процесс до 2028 г.</span>
+        </div>
+      </div>
+    </header>
+
+    <!-- Roadmap steps -->
+    <section class="roadmap">
+      <div class="step">
+        <div class="step-header">1. Очистка периметра</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 21l9-9"/><path d="M12 12l9-9"/><path d="M15 3h6v6"/><path d="M3 15h6v6"/></svg>
+          </div>
+          <div class="step-year">2026</div>
+          <div class="step-title">Очистка периметра</div>
+          <p class="step-desc">Обследование и очистка территории вокруг здания «Озерца»; подготовка к демонтажу старых ангаров, приведение участка в соответствие с нормами пожарной безопасности.</p>
+        </div>
+      </div>
+
+      <div class="arrow">&#9654;</div>
+
+      <div class="step">
+        <div class="step-header">2. Профилирование фонда</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/></svg>
+          </div>
+          <div class="step-year">2026</div>
+          <div class="step-title">Профилирование фонда</div>
+          <p class="step-desc">Проведение форменной работы по описанию и структурированию документов архивного фонда.</p>
+        </div>
+      </div>
+
+      <div class="arrow">&#9654;</div>
+
+      <div class="step">
+        <div class="step-header">3. Подготовка к утилизации</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>
+          </div>
+          <div class="step-year">2027</div>
+          <div class="step-title">Подготовка к утилизации</div>
+          <p class="step-desc">Вывоз и утилизация носителей информации, не подлежащих хранению; частичная утрата информации, не имеющей высокой ценности.</p>
+        </div>
+      </div>
+
+      <div class="arrow">&#9654;</div>
+
+      <div class="step">
+        <div class="step-header">4. Изменения регуляторики</div>
+        <div class="step-body">
+          <div class="step-icon">
+            <svg viewBox="0 0 24 24"><path d="M12 3v18"/><path d="M5 8l7-5 7 5"/><path d="M5 16l7 5 7-5"/><line x1="5" y1="8" x2="5" y2="16"/><line x1="19" y1="8" x2="19" y2="16"/></svg>
+          </div>
+          <div class="step-year">2028</div>
+          <div class="step-title">Изменения регуляторики</div>
+          <p class="step-desc">Ожидание изменений в законодательстве, регулирующем хранение архивов (в т.ч. льготы для аутсорсинговых компаний).</p>
+        </div>
+      </div>
+
+      <div class="arrow">&#9654;</div>
+
+      <div class="goal-box">
+        <div class="goal-header">ЦЕЛЬ ПРОЕКТА</div>
+        <div class="goal-body">
+          <div class="goal-icon">
+            <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><circle cx="12" cy="12" r="6"/><circle cx="12" cy="12" r="2"/></svg>
+          </div>
+          <p class="goal-text">Сократить объём архива</p>
+          <p class="goal-highlight">до менее 100 млн листов</p>
+          <hr class="goal-divider">
+          <p class="goal-note">С 2026 по 2028 г.<br>Полная высвобождаемость здания «Озерца» к 2028 году</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Management options -->
+    <section class="mgmt-section">
+      <div class="mgmt-header">
+        <span>Варианты управления архивным фондом</span>
+        <span class="year-badge">2028+</span>
+      </div>
+
+      <div class="mgmt-options">
+        <div class="mgmt-block">
+          <div class="mgmt-icon">
+            <svg viewBox="0 0 24 24"><rect x="4" y="2" width="16" height="20" rx="1"/><line x1="9" y1="6" x2="15" y2="6"/><line x1="9" y1="10" x2="15" y2="10"/><line x1="9" y1="14" x2="13" y2="14"/></svg>
+          </div>
+          <div class="mgmt-title">Аутсорсинг</div>
+          <p class="mgmt-desc">Передача управления архивным фондом внешней специализированной организации.</p>
+        </div>
+
+        <div class="mgmt-or">
+          <div class="mgmt-or-circle">или</div>
+        </div>
+
+        <div class="mgmt-block">
+          <div class="mgmt-icon">
+            <svg viewBox="0 0 24 24"><path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/><circle cx="12" cy="13" r="4"/></svg>
+          </div>
+          <div class="mgmt-title">Сканирование</div>
+          <p class="mgmt-desc">Оцифровка документов архивного фонда с последующим переходом на электронное хранение.</p>
+        </div>
+      </div>
+
+      <div class="mgmt-extra">
+        <div class="mgmt-block-wide">
+          <div class="mgmt-icon">
+            <svg viewBox="0 0 24 24"><path d="M3 21h18"/><path d="M5 21V7l8-4v18"/><path d="M19 21V11l-6-4"/><path d="M9 9v.01"/><path d="M9 12v.01"/><path d="M9 15v.01"/><path d="M9 18v.01"/></svg>
+          </div>
+          <div class="mgmt-content">
+            <div class="mgmt-title">Переезд в новое здание</div>
+            <p class="mgmt-desc">Перемещение архивного фонда в новое здание площадью около 1000 кв. м.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <strong>Главный вывод:</strong> к 2028 году сокращённый и структурированный архив создаст основу для перехода на аутсорсинг или сканирование.
+    </footer>
+  </div>
+</body>
+</html>
